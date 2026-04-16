@@ -9,12 +9,14 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @State var ingredientText = ""
     @State var homeViewModel = HomeViewModel()
+    @State var searchText = ""
+    @State private var navigate = false
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         
-        NavigationView {
+        NavigationStack {
             GeometryReader { proxy in
                 VStack {
                     Text("What's in your kitchen?")
@@ -27,18 +29,16 @@ struct HomeView: View {
                         .padding(.horizontal, 20)
                         .padding(.top, 15)
                     
-                    if homeViewModel.ingredients.count != 0 {
+                    if !homeViewModel.groupedIngredients.allSatisfy({$0.isEmpty}) {
                         ingredientCounter
                             .padding(.top, 15)
                             .padding(.leading, 25)
                     }
 
-                    
                     ingredientList
                         .padding(.top, 10)
                         .padding(.horizontal, 20)
 
-                    
                     Spacer()
                     
                     findRecipesButton
@@ -46,10 +46,13 @@ struct HomeView: View {
                     
                 }
                 .onAppear {
+                    searchText = ""
                     homeViewModel.screenWidth = proxy.size.width
                 }
+                .navigationDestination(isPresented: $navigate) {
+                    SearchView(ingredients: $homeViewModel.ingredients, searchText: searchText.trimmingCharacters(in: .whitespacesAndNewlines))
+                }
             }
-
         }
 
     }
@@ -65,22 +68,35 @@ extension HomeView {
         HStack {
             
             Button {
-                print("")
+                isFocused = false
+                if !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    navigate = true
+                }
             } label: {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 25).bold())
                     .foregroundStyle(Color.secondary)
             }
 
-            TextField(text: $ingredientText) {
+
+            TextField(text: $searchText) {
                 Text("Add an ingredient ...")
                     .font(Font.system(size: 25).bold())
                     .foregroundStyle(Color.secondary)
             }
             .font(Font.system(size: 22).bold())
+            .focused($isFocused)
             .autocorrectionDisabled(true)
             .padding(.vertical, 20)
             .padding(.horizontal, 10)
+            .submitLabel(.search)
+            .onSubmit {
+                if searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    isFocused = false
+                } else {
+                    navigate = true
+                }
+            }
             
         }
         .padding(.horizontal, 20)
@@ -90,7 +106,7 @@ extension HomeView {
     
     
     var ingredientCounter: some View {
-        Text("Your ingredients (\(homeViewModel.ingredients.count))")
+        Text("Your ingredients (\(homeViewModel.groupedIngredients.flatMap{$0}.count))")
             .foregroundStyle(Color.secondary)
             .font(.system(size: 19).bold())
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -99,7 +115,7 @@ extension HomeView {
     
     var findRecipesButton: some View {
         Button {
-            homeViewModel.ingredients.append(ingredientText)
+            //print(homeViewModel.ingredients)
         } label: {
             Text("Find recipes →")
                 .font(Font.system(size: 26).bold())
@@ -115,10 +131,12 @@ extension HomeView {
         
         VStack(alignment: .leading, spacing: 12) {
             
-            ForEach(homeViewModel.groupedIngredients, id: \.self) { ingredients in
+            ForEach($homeViewModel.groupedIngredients, id: \.self) { $ingredientsId in
                 HStack(spacing: 12) {
-                    ForEach(ingredients, id: \.self) { ingredient in
-                        ChipView(chipText: ingredient)
+                    ForEach($ingredientsId, id: \.self) { $ingredientId in
+                        if let index = homeViewModel.ingredients.firstIndex( where: {$0.id == ingredientId}) {
+                            ChipView(ingredient: $homeViewModel.ingredients[index])
+                        }
                     }
                 }
             }

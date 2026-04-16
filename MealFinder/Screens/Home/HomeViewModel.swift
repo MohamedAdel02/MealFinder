@@ -12,16 +12,33 @@ import UIKit
 @Observable
 class HomeViewModel {
     
-    var ingredients : [String] = [] {
+    var ingredients: [Ingredient] = [] {
         didSet {
-            groupedIngredients = updateGroupedArr(with: ingredients)
+            let selectedIngredients = ingredients.filter({$0.isSelected})
+            groupedIngredients = updateGroupedIng(with: selectedIngredients)
         }
     }
     
-    var groupedIngredients : [[String]] = []
+    var groupedIngredients: [[String]] = []
     var screenWidth = 0.0
     
-    func updateGroupedArr(with ingredients: [String]) -> [[String]] {
+    init () {
+        fetchIngredients()
+    }
+    
+    func fetchIngredients() {
+        Task {
+            do {
+                let data = try await NetworkManager.shared.fetchData(url: K.API.ingredients)
+                ingredients = try JSONDecoder().decode(Ingredients.self, from: data).ingredients
+                //print(allIngredients)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func updateGroupedIng(with ingredients: [Ingredient]) -> [[String]] {
         
         var groupedArr: [[String]] = []
         var tempArr: [String] = []
@@ -29,17 +46,18 @@ class HomeViewModel {
         let paddingWidth = 75.0
         
         for ingredient in ingredients {
-            let strWidth = ingredient.widthOfString(usingFont: .systemFont(ofSize: K.ChipViewFontSize, weight: .bold))
+            let ingredientName = ingredient.name
+            let strWidth = ingredientName.widthOfString(usingFont: .systemFont(ofSize: K.ChipViewFontSize, weight: .bold))
             let strWidthWithPadding = strWidth + paddingWidth
             
             if (strWidthWithPadding + totalWidth < screenWidth) {
                 totalWidth += strWidthWithPadding
-                tempArr.append(ingredient)
+                tempArr.append(ingredient.id)
             } else {
                 totalWidth = strWidthWithPadding
                 groupedArr.append(tempArr)
                 tempArr.removeAll()
-                tempArr.append(ingredient)
+                tempArr.append(ingredient.id)
             }
         }
         

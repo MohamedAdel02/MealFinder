@@ -9,25 +9,24 @@ import SwiftUI
 
 struct ChipView: View {
     
+    @Binding var ingredient: Ingredient
     @Environment(\.colorScheme) var colorScheme
-    let chipText: String
     
     var body: some View {
         
         HStack(spacing: 12) {
-            Text(chipText)
+            Text(ingredient.name)
                 .foregroundStyle(Color.accent)
                 .font(.system(size: K.ChipViewFontSize).bold())
                 .padding(.vertical, 15)
 
             Button {
-                print("")
+                ingredient.isSelected = false
             } label: {
                 Image(systemName: "xmark")
                     .font(.system(size: 14).bold())
                     .foregroundStyle(Color.accentColor)
             }
-            
                 
         }
         .padding(.horizontal, 15)
@@ -37,13 +36,10 @@ struct ChipView: View {
             Capsule()
                 .stroke(Color.accentColor)
         }
-        
-        
     }
-    
-    
+  
 }
 
 #Preview {
-    ChipView(chipText: "Test")
+    ChipView(ingredient: .constant(MockData.ingredients.first!))
 }
