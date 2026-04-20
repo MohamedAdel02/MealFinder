@@ -9,13 +9,14 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @Binding var ingredients: [Ingredient]
+    var homeViewModel: HomeViewModel
     @Environment(\.dismiss) var dismiss
     var searchText: String
     
     var body: some View {
         
-        List($ingredients) { $ingredient in
+        List(homeViewModel.ingredients.indices, id: \.self) { index in
+            let ingredient = homeViewModel.ingredients[index]
             if ingredient.name.lowercased().contains(searchText.lowercased()) {
                 HStack {
                     Text(ingredient.name)
@@ -28,7 +29,7 @@ struct SearchView: View {
                 .contentShape(Rectangle())
                 .padding(.horizontal, 20)
                 .onTapGesture {
-                    ingredient.isSelected.toggle()
+                    homeViewModel.ingredients[index].isSelected.toggle()
                 }
             }
         }
@@ -46,5 +47,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView(ingredients: .constant(MockData.ingredients), searchText: "Ch")
+    SearchView(homeViewModel: HomeViewModel(), searchText: "Ch")
 }

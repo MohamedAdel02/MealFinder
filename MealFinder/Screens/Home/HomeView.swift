@@ -7,16 +7,22 @@
 
 import SwiftUI
 
+enum Destination: Hashable {
+    case searchView(searchText: String)
+    case mealListView(ingredients: [Ingredient])
+}
+
 struct HomeView: View {
     
     @State var homeViewModel = HomeViewModel()
+    @State var path = NavigationPath()
     @State var searchText = ""
     @State private var navigate = false
     @FocusState private var isFocused: Bool
     
     var body: some View {
         
-        NavigationStack {
+        NavigationStack(path: $path) {
             GeometryReader { proxy in
                 VStack {
                     Text("What's in your kitchen?")
@@ -49,9 +55,15 @@ struct HomeView: View {
                     searchText = ""
                     homeViewModel.screenWidth = proxy.size.width
                 }
-                .navigationDestination(isPresented: $navigate) {
-                    SearchView(ingredients: $homeViewModel.ingredients, searchText: searchText.trimmingCharacters(in: .whitespacesAndNewlines))
-                }
+                .navigationDestination(for: Destination.self, destination: { distination in
+                    switch distination {
+                    case .searchView(let searchText):
+                        SearchView(homeViewModel: homeViewModel, searchText: searchText)
+                    case .mealListView(let ingredients):
+                        MealListView(ingredients: ingredients, proxy: proxy)
+                    }
+                })
+
             }
         }
 
@@ -69,8 +81,10 @@ extension HomeView {
             
             Button {
                 isFocused = false
-                if !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    navigate = true
+                
+                let text = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !text.isEmpty {
+                    path.append(Destination.searchView(searchText: searchText))
                 }
             } label: {
                 Image(systemName: "magnifyingglass")
@@ -115,7 +129,8 @@ extension HomeView {
     
     var findRecipesButton: some View {
         Button {
-            //print(homeViewModel.ingredients)
+            isFocused = false
+            path.append(Destination.mealListView(ingredients: homeViewModel.ingredients.filter({$0.isSelected})))
         } label: {
             Text("Find recipes →")
                 .font(Font.system(size: 26).bold())

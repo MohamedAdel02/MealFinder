@@ -23,18 +23,19 @@ class HomeViewModel {
     var screenWidth = 0.0
     
     init () {
-        fetchIngredients()
+        
+        Task{
+            await fetchIngredients()
+        }
     }
     
-    func fetchIngredients() {
-        Task {
-            do {
-                let data = try await NetworkManager.shared.fetchData(url: K.API.ingredients)
-                ingredients = try JSONDecoder().decode(Ingredients.self, from: data).ingredients
-                //print(allIngredients)
-            } catch {
-                print(error.localizedDescription)
-            }
+    func fetchIngredients() async {
+        do {
+            let data = try await NetworkManager.shared.fetchData(url: K.API.ingredients)
+            ingredients = try JSONDecoder().decode(Ingredients.self, from: data).ingredients
+            //print(allIngredients)
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

@@ -17,7 +17,7 @@ struct Ingredients: Codable {
 }
 
 
-struct Ingredient: Codable, Identifiable {
+struct Ingredient: Codable, Hashable, Identifiable {
     
     let id: String
     let name: String
