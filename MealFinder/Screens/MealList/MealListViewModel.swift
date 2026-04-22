@@ -12,6 +12,8 @@ import Foundation
 class MealListViewModel {
     
     var meals = [Meal]()
+    var numOfPerfectMatch = 0
+    var categories = [String]()
     
     init (ingredients: [Ingredient]) {
         
@@ -20,6 +22,7 @@ class MealListViewModel {
                 let mealsId = try await getMealsId(from: ingredients)
                 let mealSet = try await getMealsDetails(of: mealsId)
                 meals = setMealsScore(mealSet, for: ingredients)
+                categories = getCategories(from: meals)
             } catch {
                 print(error.localizedDescription)
             }
@@ -45,7 +48,7 @@ class MealListViewModel {
     func getMealsDetails(of mealsId: Set<String>) async throws -> Set<Meal> {
         let task = Task {
             let urls = getUrls(from: mealsId)
-            let dataArr = try await fetchMeals(from: urls)
+            let dataArr = await fetchMeals(from: urls)
             var meals = Set<Meal>()
             for data in dataArr {
                 if let meal = try JSONDecoder().decode(Meals.self, from: data).meals.first {
@@ -66,7 +69,11 @@ class MealListViewModel {
             let matchedCount = meal.ingredients.filter {
                 userIngredientNames.contains($0.name.lowercased())
             }.count
-            meal.score = meal.ingredients.count - matchedCount
+            let score = meal.ingredients.count - matchedCount
+            if score == 0 {
+                numOfPerfectMatch += 1
+            }
+            meal.score = score
             mealsArr.append(meal)
         }
         mealsArr.sort { $0.score < $1.score }
@@ -89,21 +96,35 @@ class MealListViewModel {
         return urls
     }
     
-    func fetchMeals(from urls: [String]) async throws -> [Data] {
-        try await withThrowingTaskGroup(of: Data.self) { group in
+    func fetchMeals(from urls: [String]) async -> [Data] {
+        await withTaskGroup(of: Data?.self) { group in
             for url in urls {
                 group.addTask {
-                    return try await NetworkManager.shared.fetchData(url: url)
+                    return try? await NetworkManager.shared.fetchData(url: url)
                 }
             }
             
             var dataArr = [Data]()
-            for try await data in group {
-                dataArr.append(data)
+            for await data in group {
+                if let data {
+                    dataArr.append(data)
+                }
             }
             return dataArr
         }
+    }
+    
+    func getCategories(from meals: [Meal]) -> [String] {
+        var categoriesDic: [String: Int] = [:]
+        for meal in meals {
+            if let category = meal.category {
+                categoriesDic[category, default: 0] += 1
+            }
+        }
         
+        var sortedArr = categoriesDic.sorted { $0.value > $1.value }.map { $0.key }
+        sortedArr.insert("All", at: 0)
+        return sortedArr
     }
     
 }

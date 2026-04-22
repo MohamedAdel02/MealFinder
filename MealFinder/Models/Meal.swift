@@ -45,6 +45,7 @@ struct Meal: Codable, Hashable, Identifiable {
     
     
     init(from decoder: Decoder) throws {
+        // container 1 — uses your fixed enum keys
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
@@ -52,6 +53,7 @@ struct Meal: Codable, Hashable, Identifiable {
         thumbnail = try container.decodeIfPresent(String.self, forKey: .thumbnail)
         instructions = try container.decodeIfPresent(String.self, forKey: .instructions)
         
+        // container 2 — uses dynamic string keys
         let dynamicContainer = try decoder.container(keyedBy: DynamicKey.self)
         var result: [Ingredient] = []
         
@@ -75,7 +77,11 @@ struct Meal: Codable, Hashable, Identifiable {
 struct DynamicKey: CodingKey {
     var stringValue: String
     var intValue: Int? { nil }
+    
+    // our custom init, takes any string and stores it
     init(string: String) { self.stringValue = string }
+    
+    // required by the protocol
     init?(stringValue: String) { self.stringValue = stringValue }
     init?(intValue: Int) { nil }
 }

@@ -15,68 +15,36 @@ struct MealCell: View {
     
     var body: some View {
         VStack {
-            AsyncImage(url: URL(string: meal.thumbnail ?? "")){ image in
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: proxy.size.height * 0.15)
-                    .clipped()
-            } placeholder: {
-                ProgressView()
-                    .frame(width: 100, height: 100)
-            }
+
+            mealImage
             
-            Text(meal.name)
-                .font(.headline)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .lineLimit(2)
+            mealName
                 .padding(.vertical, 10)
                 .padding(.horizontal, 8)
             
             Spacer()
           
-            
-            VStack(alignment: .leading) {
+            VStack {
+                
                 if let category = meal.category {
                     Text("\(category)")
-                        .font(.subheadline)
-                        .bold()
+                        .font(.subheadline.bold())
                         .padding(.horizontal, 15)
                         .padding(.vertical, 5)
                         .frame(maxWidth: .infinity)
-                        .foregroundStyle(Color(red: 0.6, green: 0.31, blue: 0.04))
-                        .background((Color(red: 0.52, green: 0.31, blue: 0.04)).opacity(colorScheme == .light ? 0.1 : 0.2))
+                        .foregroundStyle(Color.cellChipText)
+                        .background(Color.cellChipBackground)
                         .clipShape(Capsule())
                 }
                 
-                
                 if meal.score == 0 {
-                    Text("Full match")
-                        .bold()
-                        .font(.subheadline)
-                        .padding(.horizontal, 15)
-                        .padding(.vertical, 5)
-                        .frame(maxWidth: .infinity)
-                        .foregroundStyle(.accent)
-                        .background(Color.accentColor.opacity(colorScheme == .light ? 0.1 : 0.3))
-                        .clipShape(Capsule())
+                    fullMatchText
                 } else {
-                    Text("+\(meal.score) items")
-                        .bold()
-                        .font(.subheadline)
-                        .padding(.horizontal, 15)
-                        .padding(.vertical, 5)
-                        .frame(maxWidth: .infinity)
-                        .foregroundStyle(Color(red: 0.6, green: 0.31, blue: 0.04))
-                        .background((Color(red: 0.52, green: 0.31, blue: 0.04)).opacity(colorScheme == .light ? 0.1 : 0.2))
-                        .clipShape(Capsule())
+                    numOfItems
                 }
             }
             .padding(.horizontal, 15)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
+            .frame(maxWidth: .infinity, alignment: .center)
 
         }
         .frame(height: proxy.size.height * 0.35)
@@ -91,4 +59,56 @@ struct MealCell: View {
     GeometryReader { proxy in
         MealCell(meal: MockData.meal, proxy: proxy)
     }
+}
+
+extension MealCell {
+    
+    var mealImage: some View {
+        
+        AsyncImage(url: URL(string: meal.thumbnail ?? "")){ image in
+            image
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity)
+                .frame(height: proxy.size.height * 0.15)
+                .clipped()
+        } placeholder: {
+            ProgressView()
+                .frame(width: 100, height: 100)
+        }
+    }
+    
+    var mealName: some View {
+        Text(meal.name)
+            .font(.headline)
+            .bold()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .lineLimit(2)
+    }
+    
+    
+    var fullMatchText: some View {
+        Text("Perfect match")
+            .bold()
+            .font(.subheadline)
+            .padding(.horizontal, 15)
+            .padding(.vertical, 5)
+            .frame(maxWidth: .infinity)
+            .foregroundStyle(.accent)
+            .background(Color.accentColor.opacity(colorScheme == .light ? 0.1 : 0.3))
+            .clipShape(Capsule())
+    }
+    
+    var numOfItems: some View {
+        Text("+\(meal.score) items")
+            .bold()
+            .font(.subheadline)
+            .padding(.horizontal, 15)
+            .padding(.vertical, 5)
+            .frame(maxWidth: .infinity)
+            .foregroundStyle(Color.cellChipText)
+            .background(Color.cellChipBackground)
+            .clipShape(Capsule())
+    }
+    
 }

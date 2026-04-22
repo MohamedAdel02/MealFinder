@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D900A54C2F91475B00DB4600 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D900A54B2F91475B00DB4600 /* MockData.swift */; };
+		D984CB5A2F9852B30089CBE5 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D984CB592F9852B30089CBE5 /* CustomText.swift */; };
 		D98D0B842F96417800B87332 /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98D0B832F96417800B87332 /* MealListView.swift */; };
 		D98D0B872F96419000B87332 /* MealListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98D0B862F96419000B87332 /* MealListViewModel.swift */; };
 		D98D0B892F9642A200B87332 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98D0B882F9642A200B87332 /* Meal.swift */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		D900A54B2F91475B00DB4600 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		D984CB592F9852B30089CBE5 /* CustomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
 		D98D0B832F96417800B87332 /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
 		D98D0B862F96419000B87332 /* MealListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListViewModel.swift; sourceTree = "<group>"; };
 		D98D0B882F9642A200B87332 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				D9A15B092F8A798900BD0F7B /* ChipView.swift */,
 				D98D0B8A2F96A79700B87332 /* MealCell.swift */,
+				D984CB592F9852B30089CBE5 /* CustomText.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				D99D26C62F89B78C0054B119 /* MealFinderApp.swift in Sources */,
 				D9A15B0C2F8AF7C100BD0F7B /* Constants.swift in Sources */,
 				D900A54C2F91475B00DB4600 /* MockData.swift in Sources */,
+				D984CB5A2F9852B30089CBE5 /* CustomText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
