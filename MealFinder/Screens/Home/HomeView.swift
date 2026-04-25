@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Destination: Hashable {
+enum HomeNavDestination: Hashable {
     case searchView(searchText: String)
     case mealListView(ingredients: [Ingredient])
 }
@@ -17,12 +17,13 @@ struct HomeView: View {
     @State var homeViewModel = HomeViewModel()
     @State var path = NavigationPath()
     @State var searchText = ""
-    @State private var navigate = false
+    @Environment(Router.self) var router
     @FocusState private var isFocused: Bool
     
     var body: some View {
-        
-        NavigationStack(path: $path) {
+        @Bindable var router = router
+
+        NavigationStack(path: $router.path) {
             GeometryReader { proxy in
                 VStack {
                     Text("What's in your kitchen?")
@@ -55,7 +56,7 @@ struct HomeView: View {
                     searchText = ""
                     homeViewModel.screenWidth = proxy.size.width
                 }
-                .navigationDestination(for: Destination.self, destination: { distination in
+                .navigationDestination(for: HomeNavDestination.self, destination: { distination in
                     switch distination {
                     case .searchView(let searchText):
                         SearchView(homeViewModel: homeViewModel, searchText: searchText)
@@ -72,6 +73,7 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(Router())
 }
 
 extension HomeView {
@@ -84,7 +86,7 @@ extension HomeView {
                 
                 let text = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !text.isEmpty {
-                    path.append(Destination.searchView(searchText: searchText))
+                    router.path.append(HomeNavDestination.searchView(searchText: searchText))
                 }
             } label: {
                 Image(systemName: "magnifyingglass")
@@ -108,7 +110,7 @@ extension HomeView {
                 if searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     isFocused = false
                 } else {
-                    navigate = true
+                    router.path.append(HomeNavDestination.searchView(searchText: searchText))
                 }
             }
             
@@ -130,7 +132,7 @@ extension HomeView {
     var findRecipesButton: some View {
         Button {
             isFocused = false
-            path.append(Destination.mealListView(ingredients: homeViewModel.ingredients.filter({$0.isSelected})))
+            router.path.append(HomeNavDestination.mealListView(ingredients: homeViewModel.ingredients.filter({$0.isSelected})))
         } label: {
             Text("Find recipes →")
                 .font(Font.system(size: 26).bold())

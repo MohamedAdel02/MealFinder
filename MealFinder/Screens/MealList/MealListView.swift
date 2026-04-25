@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+enum MealDetailsNavDestination: Hashable {
+    case MealDetailsView(meal: Meal)
+}
+
 struct MealListView: View {
     
     @State var mealListViewModel: MealListViewModel
     @State var selectedCategory = "All"
     @Environment(\.colorScheme) var colorScheme
+    @Environment(Router.self) var router
     let proxy: GeometryProxy
     
     let columns = [
@@ -37,6 +42,9 @@ struct MealListView: View {
                     selectedCategory == "All" || $0.category == selectedCategory
                 }) { meal in
                     MealCell(meal: meal, proxy: proxy)
+                        .onTapGesture {
+                            router.path.append(MealDetailsNavDestination.MealDetailsView(meal: meal))
+                        }
                 }
             }
             .padding(.horizontal, 15)
@@ -44,6 +52,12 @@ struct MealListView: View {
         .scrollIndicators(.hidden)
         .navigationTitle("Meals")
         .navigationBarTitleDisplayMode(.large)
+        .navigationDestination(for: MealDetailsNavDestination.self) { destination in
+            switch destination {
+            case .MealDetailsView(let meal):
+                MealDetailsView(meal: meal, ingredients: mealListViewModel.ingredients, proxy: proxy)
+            }
+        }
     }
     
     

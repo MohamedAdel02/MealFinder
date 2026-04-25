@@ -14,8 +14,11 @@ class MealListViewModel {
     var meals = [Meal]()
     var numOfPerfectMatch = 0
     var categories = [String]()
+    let ingredients: [Ingredient]
     
     init (ingredients: [Ingredient]) {
+        
+        self.ingredients = ingredients
         
         Task {
             do {
@@ -32,7 +35,7 @@ class MealListViewModel {
     func getMealsId(from ingredients: [Ingredient]) async throws -> Set<String> {
         let task = Task {
             let urls = getUrls(from: ingredients)
-            let dataArr = try await fetchMeals(from: urls)
+            let dataArr = await fetchMeals(from: urls)
             var mealsIdSet = Set<String>()
             for data in dataArr {
                 let meals = try JSONDecoder().decode(Meals.self, from: data).meals

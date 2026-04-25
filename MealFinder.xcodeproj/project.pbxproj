@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		D900A54C2F91475B00DB4600 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D900A54B2F91475B00DB4600 /* MockData.swift */; };
 		D984CB5A2F9852B30089CBE5 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D984CB592F9852B30089CBE5 /* CustomText.swift */; };
+		D987719A2F9D392E0068BE47 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98771992F9D392E0068BE47 /* Router.swift */; };
+		D987719D2F9D3A1C0068BE47 /* MealDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D987719C2F9D3A1C0068BE47 /* MealDetailsView.swift */; };
+		D987719F2F9D3A3C0068BE47 /* MealDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D987719E2F9D3A3C0068BE47 /* MealDetailsViewModel.swift */; };
 		D98D0B842F96417800B87332 /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98D0B832F96417800B87332 /* MealListView.swift */; };
 		D98D0B872F96419000B87332 /* MealListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98D0B862F96419000B87332 /* MealListViewModel.swift */; };
 		D98D0B892F9642A200B87332 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98D0B882F9642A200B87332 /* Meal.swift */; };
@@ -28,6 +31,9 @@
 /* Begin PBXFileReference section */
 		D900A54B2F91475B00DB4600 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		D984CB592F9852B30089CBE5 /* CustomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
+		D98771992F9D392E0068BE47 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		D987719C2F9D3A1C0068BE47 /* MealDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailsView.swift; sourceTree = "<group>"; };
+		D987719E2F9D3A3C0068BE47 /* MealDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailsViewModel.swift; sourceTree = "<group>"; };
 		D98D0B832F96417800B87332 /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
 		D98D0B862F96419000B87332 /* MealListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListViewModel.swift; sourceTree = "<group>"; };
 		D98D0B882F9642A200B87332 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
@@ -72,6 +78,15 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		D987719B2F9D3A090068BE47 /* MealDetails */ = {
+			isa = PBXGroup;
+			children = (
+				D987719C2F9D3A1C0068BE47 /* MealDetailsView.swift */,
+				D987719E2F9D3A3C0068BE47 /* MealDetailsViewModel.swift */,
+			);
+			path = MealDetails;
+			sourceTree = "<group>";
+		};
 		D98D0B822F96416700B87332 /* MealList */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				D99D26BB2F89B78C0054B119 /* MealFinderApp.swift */,
+				D98771992F9D392E0068BE47 /* Router.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -144,6 +160,7 @@
 		D99D26C12F89B78C0054B119 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				D987719B2F9D3A090068BE47 /* MealDetails */,
 				D98D0B822F96416700B87332 /* MealList */,
 				D900A5492F91428700DB4600 /* Search */,
 				D9A15AF82F8A5E0A00BD0F7B /* Home */,
@@ -267,10 +284,13 @@
 				D9E3CB472F905EB700270766 /* SearchView.swift in Sources */,
 				D98D0B892F9642A200B87332 /* Meal.swift in Sources */,
 				D9A15AFA2F8A5E1900BD0F7B /* HomeView.swift in Sources */,
+				D987719F2F9D3A3C0068BE47 /* MealDetailsViewModel.swift in Sources */,
 				D98D0B8B2F96A79700B87332 /* MealCell.swift in Sources */,
 				D9A15B0E2F8B029100BD0F7B /* Ingredient.swift in Sources */,
 				D9A15B0A2F8A798900BD0F7B /* ChipView.swift in Sources */,
 				D98D0B872F96419000B87332 /* MealListViewModel.swift in Sources */,
+				D987719D2F9D3A1C0068BE47 /* MealDetailsView.swift in Sources */,
+				D987719A2F9D392E0068BE47 /* Router.swift in Sources */,
 				D9A15B102F8B02D300BD0F7B /* NetworkManager.swift in Sources */,
 				D9A15B042F8A671C00BD0F7B /* HomeViewModel.swift in Sources */,
 				D98D0B842F96417800B87332 /* MealListView.swift in Sources */,

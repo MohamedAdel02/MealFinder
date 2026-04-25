@@ -18,7 +18,7 @@ struct Meal: Codable, Hashable, Identifiable {
     let category: String?
     let thumbnail: String?
     let instructions: String?
-    let ingredients: [Ingredient]
+    var ingredients: [Ingredient]
     
     struct Ingredient: Hashable {
         let name: String
