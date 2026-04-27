@@ -26,6 +26,10 @@
 		D9A15B0E2F8B029100BD0F7B /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A15B0D2F8B029100BD0F7B /* Ingredient.swift */; };
 		D9A15B102F8B02D300BD0F7B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A15B0F2F8B02D300BD0F7B /* NetworkManager.swift */; };
 		D9E3CB472F905EB700270766 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E3CB462F905EB700270766 /* SearchView.swift */; };
+		D9E97F672F9FFF070081CAD8 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E97F662F9FFF070081CAD8 /* Keys.swift */; };
+		D9E97F692F9FFF280081CAD8 /* GeminiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E97F682F9FFF280081CAD8 /* GeminiResponse.swift */; };
+		D9E97F6B2F9FFF960081CAD8 /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E97F6A2F9FFF960081CAD8 /* StepsView.swift */; };
+		D9E97F6D2F9FFFC30081CAD8 /* GeminiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E97F6C2F9FFFC30081CAD8 /* GeminiManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +53,10 @@
 		D9A15B0D2F8B029100BD0F7B /* Ingredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
 		D9A15B0F2F8B02D300BD0F7B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		D9E3CB462F905EB700270766 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		D9E97F662F9FFF070081CAD8 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		D9E97F682F9FFF280081CAD8 /* GeminiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiResponse.swift; sourceTree = "<group>"; };
+		D9E97F6A2F9FFF960081CAD8 /* StepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
+		D9E97F6C2F9FFFC30081CAD8 /* GeminiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +91,7 @@
 			children = (
 				D987719C2F9D3A1C0068BE47 /* MealDetailsView.swift */,
 				D987719E2F9D3A3C0068BE47 /* MealDetailsViewModel.swift */,
+				D9E97F6A2F9FFF960081CAD8 /* StepsView.swift */,
 			);
 			path = MealDetails;
 			sourceTree = "<group>";
@@ -136,6 +145,7 @@
 			children = (
 				D9A15B062F8A6F8D00BD0F7B /* Extensions */,
 				D9A15B0B2F8AF7C100BD0F7B /* Constants.swift */,
+				D9E97F662F9FFF070081CAD8 /* Keys.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -145,6 +155,7 @@
 			children = (
 				D9A15B0D2F8B029100BD0F7B /* Ingredient.swift */,
 				D98D0B882F9642A200B87332 /* Meal.swift */,
+				D9E97F682F9FFF280081CAD8 /* GeminiResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -172,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				D9A15B0F2F8B02D300BD0F7B /* NetworkManager.swift */,
+				D9E97F6C2F9FFFC30081CAD8 /* GeminiManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -286,15 +298,19 @@
 				D9A15AFA2F8A5E1900BD0F7B /* HomeView.swift in Sources */,
 				D987719F2F9D3A3C0068BE47 /* MealDetailsViewModel.swift in Sources */,
 				D98D0B8B2F96A79700B87332 /* MealCell.swift in Sources */,
+				D9E97F672F9FFF070081CAD8 /* Keys.swift in Sources */,
 				D9A15B0E2F8B029100BD0F7B /* Ingredient.swift in Sources */,
 				D9A15B0A2F8A798900BD0F7B /* ChipView.swift in Sources */,
 				D98D0B872F96419000B87332 /* MealListViewModel.swift in Sources */,
 				D987719D2F9D3A1C0068BE47 /* MealDetailsView.swift in Sources */,
+				D9E97F692F9FFF280081CAD8 /* GeminiResponse.swift in Sources */,
 				D987719A2F9D392E0068BE47 /* Router.swift in Sources */,
 				D9A15B102F8B02D300BD0F7B /* NetworkManager.swift in Sources */,
 				D9A15B042F8A671C00BD0F7B /* HomeViewModel.swift in Sources */,
 				D98D0B842F96417800B87332 /* MealListView.swift in Sources */,
+				D9E97F6D2F9FFFC30081CAD8 /* GeminiManager.swift in Sources */,
 				D99D26C62F89B78C0054B119 /* MealFinderApp.swift in Sources */,
+				D9E97F6B2F9FFF960081CAD8 /* StepsView.swift in Sources */,
 				D9A15B0C2F8AF7C100BD0F7B /* Constants.swift in Sources */,
 				D900A54C2F91475B00DB4600 /* MockData.swift in Sources */,
 				D984CB5A2F9852B30089CBE5 /* CustomText.swift in Sources */,

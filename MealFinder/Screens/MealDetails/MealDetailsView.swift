@@ -23,7 +23,7 @@ struct MealDetailsView: View {
     }
     
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             
             mealImage
             
@@ -44,6 +44,9 @@ struct MealDetailsView: View {
                 .padding(.leading, 20)
                 .padding(.trailing, 10)
 
+            StepsView(meal: meal, MealDetailsViewModel: mealDetailsViewModel)
+                .padding(.top, 20)
+            
         }
         
     }

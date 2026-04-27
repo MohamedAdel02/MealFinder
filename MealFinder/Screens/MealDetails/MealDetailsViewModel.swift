@@ -24,4 +24,18 @@ class MealDetailsViewModel {
         return meal
     }
     
+    func getSteps(of meal: Meal) async -> [String] {
+        
+        guard let instructions = meal.instructions else { return [] }
+        
+        do {
+            let setps = try await GeminiManager.shared.getSteps(instructions)
+            return setps
+        } catch {
+            print(error.localizedDescription)
+            return []
+        }
+                
+    }
+    
 }
