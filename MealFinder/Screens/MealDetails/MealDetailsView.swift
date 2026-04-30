@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MealDetailsView: View {
     
@@ -14,6 +15,7 @@ struct MealDetailsView: View {
     let userIngredients: [String]
     let proxy: GeometryProxy
     let customRed = Color(red: 0.85, green: 0.2, blue: 0.15)
+    @Environment(\.modelContext) private var context
 
     
     init(meal: Meal, ingredients: [Ingredient], proxy: GeometryProxy) {
@@ -44,8 +46,27 @@ struct MealDetailsView: View {
                 .padding(.leading, 20)
                 .padding(.trailing, 10)
 
-            StepsView(meal: meal, MealDetailsViewModel: mealDetailsViewModel)
-                .padding(.top, 20)
+//            StepsView(meal: meal, MealDetailsViewModel: mealDetailsViewModel)
+//                .padding(.top, 20)
+            
+            Button {
+                let recipe = Recipe(
+                    name: meal.name,
+                    category: meal.category,
+                    thumbnail: meal.thumbnail,
+                    instructions: meal.instructions,
+                    ingredients: meal.ingredients.map { Recipe.Ingredient(name: $0.name, measure: $0.measure)})
+                context.insert(recipe)
+            } label: {
+                Text("Add to Favorites")
+                    .font(.title3.bold())
+                    .frame(width: 230, height: 60)
+                    .background(.accent)
+                    .foregroundStyle(.background)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            }
+            .padding(.top, 30)
+
             
         }
         

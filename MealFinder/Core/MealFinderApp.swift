@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct MealFinderApp: App {
@@ -16,5 +17,6 @@ struct MealFinderApp: App {
             HomeView()
                 .environment(router)
         }
+        .modelContainer(for: Recipe.self)
     }
 }
