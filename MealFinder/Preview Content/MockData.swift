@@ -21,5 +21,13 @@ struct MockData {
                                          Meal.Ingredient(name: "Milk", measure: "1/4 cup"),
                                          Meal.Ingredient(name: "Flour", measure: "1/2 cup")])
     
+    static var recipe = Recipe(name: "Chick-Fil-A Sandwich",
+                               category: "Chicken",
+                               thumbnail: "https://www.themealdb.com/images/media/meals/sbx7n71587673021.jpg",
+                               instructions: "Wrap the chicken loosely between plastic wrap and pound gently with the flat side of a meat tenderizer until about 1/2 inch thick all around.\r\nCut into two pieces, as even as possible.\r\nMarinate in the pickle juice for 30 minutes to one hour (add a teaspoon of Tabasco sauce now for a spicy sandwich).\r\nBeat the egg with the milk in a bowl.\r\nCombine the flour, sugar, and spices in another bowl.\r\nDip the chicken pieces each into the egg on both sides, then coat in flour on both sides.\r\nHeat the oil in a skillet (1/2 inch deep) to about 345-350.\r\nFry each cutlet for 2 minutes on each side, or until golden and cooked through.\r\nBlot on paper and serve on toasted buns with pickle slices.",
+                               ingredients: [Recipe.Ingredient(name: "Chicken Breast", measure: "1"),
+                                             Recipe.Ingredient(name: "Milk", measure: "1/4 cup"),
+                                             Recipe.Ingredient(name: "Flour", measure: "1/2 cup")])
+    
  
 }

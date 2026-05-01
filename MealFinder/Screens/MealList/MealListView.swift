@@ -16,7 +16,7 @@ struct MealListView: View {
     @State var mealListViewModel: MealListViewModel
     @State var selectedCategory = "All"
     @Environment(\.colorScheme) var colorScheme
-    @Environment(Router.self) var router
+    @Environment(Router.self) var homeRouter
     let proxy: GeometryProxy
     
     let columns = [
@@ -43,7 +43,7 @@ struct MealListView: View {
                 }) { meal in
                     MealCell(meal: meal, proxy: proxy)
                         .onTapGesture {
-                            router.path.append(MealDetailsNavDestination.MealDetailsView(meal: meal))
+                            homeRouter.path.append(MealDetailsNavDestination.MealDetailsView(meal: meal))
                         }
                 }
             }

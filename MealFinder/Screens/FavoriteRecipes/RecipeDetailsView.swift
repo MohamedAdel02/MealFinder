@@ -1,36 +1,24 @@
 //
-//  MealDetailsView.swift
+//  RecipeDetailsView.swift
 //  MealFinder
 //
-//  Created by Mohamed Adel on 24/04/2026.
+//  Created by Mohamed Adel on 01/05/2026.
 //
 
 import SwiftUI
-import SwiftData
 
-struct MealDetailsView: View {
-    
-    var mealDetailsViewModel = MealDetailsViewModel()
-    let meal: Meal
-    let userIngredients: [String]
+struct RecipeDetailsView: View {
+    let recipe: Recipe
     let proxy: GeometryProxy
-    let customRed = Color(red: 0.85, green: 0.2, blue: 0.15)
-    @Query var recipes: [Recipe]
-    @Environment(\.modelContext) private var context
+    
+    var onDeleteTapped: () -> Void
 
-    
-    init(meal: Meal, ingredients: [Ingredient], proxy: GeometryProxy) {
-        self.userIngredients = ingredients.map{ $0.name }
-        self.meal = mealDetailsViewModel.updateIngredientsOrder(meal: meal, userIngredients: userIngredients)
-        self.proxy = proxy
-    }
-    
     var body: some View {
         ScrollView(showsIndicators: false) {
             
-            mealImage
+            recipeImage
             
-            Text("\(meal.name)")
+            Text("\(recipe.name)")
                 .font(.title.bold())
                 .padding(.vertical, 10)
                 .padding(.horizontal, 20)
@@ -47,42 +35,38 @@ struct MealDetailsView: View {
                 .padding(.leading, 20)
                 .padding(.trailing, 10)
 
-            StepsView(instructions: meal.instructions)
+            StepsView(instructions: recipe.instructions)
                 .padding(.top, 20)
             
             Button {
-                let recipe = Recipe(
-                    name: meal.name,
-                    category: meal.category,
-                    thumbnail: meal.thumbnail,
-                    instructions: meal.instructions,
-                    ingredients: meal.ingredients.map { Recipe.Ingredient(name: $0.name, measure: $0.measure)})
-                if !recipes.contains(recipe) {
-                    context.insert(recipe)
-                }
+                onDeleteTapped()
             } label: {
-                Text("Add to Favorites")
+                Text("Remove from Favorites")
                     .font(.title3.bold())
                     .frame(width: 230, height: 60)
-                    .background(.accent)
+                    .background(.red)
                     .foregroundStyle(.background)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
             }
             .padding(.vertical, 30)
+            
         }
     }
 }
 
 #Preview {
     GeometryReader { proxy in
-        MealDetailsView(meal: MockData.meal, ingredients: Array(MockData.ingredients[4...9]), proxy: proxy)
+        RecipeDetailsView(recipe: MockData.recipe, proxy: proxy) {
+            print("Delete")
+        }
     }
 }
 
-extension MealDetailsView {
+
+extension RecipeDetailsView {
     
-    var mealImage: some View {
-        AsyncImage(url: URL(string: meal.thumbnail ?? "")){ image in
+    var recipeImage: some View {
+        AsyncImage(url: URL(string: recipe.thumbnail ?? "")){ image in
             image
                 .resizable()
                 .scaledToFill()
@@ -98,25 +82,22 @@ extension MealDetailsView {
     
     var IngredientsList: some View {
         
-        ForEach(meal.ingredients, id: \.self) { ingredient in
+        ForEach(recipe.ingredients, id: \.self) { ingredient in
             HStack {
                 
                 Image(systemName: "circle.fill")
-                    .foregroundStyle(userIngredients.contains(ingredient.name) ? Color.accentColor : customRed)
                     .font(.caption2)
                     .padding(.trailing, 5)
+                    .foregroundStyle(.accent)
                 
                 Text(ingredient.name)
                     .font(.headline.bold())
-                    .foregroundStyle(userIngredients.contains(ingredient.name) ? Color.primary : customRed)
-                
                 
                 Spacer()
                 
                 Text(ingredient.measure)
                     .font(.callout.bold())
                     .frame(width: 140, alignment: .leading)
-                    .foregroundStyle(userIngredients.contains(ingredient.name) ? Color.primary : customRed)
 
 
             }
@@ -125,7 +106,5 @@ extension MealDetailsView {
         .frame(maxWidth: .infinity, alignment: .leading)
 
     }
-    
-    
-    
+
 }

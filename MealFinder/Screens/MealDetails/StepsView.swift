@@ -10,8 +10,12 @@ import SwiftUI
 struct StepsView: View {
     
     @State var steps = [String]()
-    let meal: Meal
-    let MealDetailsViewModel: MealDetailsViewModel
+    let instructions: String
+    let mealDetailsViewModel = MealDetailsViewModel()
+    
+    init(instructions: String?) {
+        self.instructions = instructions ?? ""
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -40,12 +44,14 @@ struct StepsView: View {
             .padding(.horizontal, 25)
         }
         .task {
-            steps = await MealDetailsViewModel.getSteps(of: meal)
+            if instructions != "" {
+                steps = await mealDetailsViewModel.getSteps(of: instructions)
+            }
         }
     }
         
 }
 
 #Preview {
-    StepsView(meal: MockData.meal, MealDetailsViewModel: MealDetailsViewModel())
+    StepsView(instructions: MockData.meal.instructions)
 }

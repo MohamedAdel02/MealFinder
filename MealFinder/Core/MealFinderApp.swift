@@ -10,12 +10,10 @@ import SwiftData
 
 @main
 struct MealFinderApp: App {
-    @State var router = Router()
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
-                .environment(router)
+            AppTabView()
         }
         .modelContainer(for: Recipe.self)
     }

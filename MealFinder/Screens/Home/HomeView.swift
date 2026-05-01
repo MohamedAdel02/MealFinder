@@ -17,58 +17,55 @@ struct HomeView: View {
     @State var homeViewModel = HomeViewModel()
     @State var path = NavigationPath()
     @State var searchText = ""
-    @Environment(Router.self) var router
+    @Environment(Router.self) var homeRouter
     @FocusState private var isFocused: Bool
     
     var body: some View {
-        @Bindable var router = router
 
-        NavigationStack(path: $router.path) {
-            GeometryReader { proxy in
-                VStack {
-                    Text("What's in your kitchen?")
-                        .font(.system(size: 30).bold())
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 30)
-                        .padding(.horizontal, 20)
-                    
-                    ingredientTextField
-                        .padding(.horizontal, 20)
+        GeometryReader { proxy in
+            VStack {
+                Text("What's in your kitchen?")
+                    .font(.system(size: 30).bold())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 30)
+                    .padding(.horizontal, 20)
+                
+                ingredientTextField
+                    .padding(.horizontal, 20)
+                    .padding(.top, 15)
+                
+                if !homeViewModel.groupedIngredients.allSatisfy({$0.isEmpty}) {
+                    ingredientCounter
                         .padding(.top, 15)
-                    
-                    if !homeViewModel.groupedIngredients.allSatisfy({$0.isEmpty}) {
-                        ingredientCounter
-                            .padding(.top, 15)
-                            .padding(.leading, 25)
-                    }
-
-                    ingredientList
-                        .padding(.top, 10)
-                        .padding(.horizontal, 20)
-
-                    Spacer()
-                    
-                    findRecipesButton
-                        .padding(.bottom, 20)
-                    
+                        .padding(.leading, 25)
                 }
-                .onAppear {
-                    searchText = ""
-                    homeViewModel.screenWidth = proxy.size.width
-                }
-                .navigationDestination(for: HomeNavDestination.self, destination: { distination in
-                    switch distination {
-                    case .searchView(let searchText):
-                        SearchView(homeViewModel: homeViewModel, searchText: searchText)
-                    case .mealListView(let ingredients):
-                        MealListView(ingredients: ingredients, proxy: proxy)
-                    }
-                })
 
+                ingredientList
+                    .padding(.top, 10)
+                    .padding(.horizontal, 20)
+
+                Spacer()
+                
+                findRecipesButton
+                    .padding(.bottom, 20)
+                
             }
-        }
+            .onAppear {
+                searchText = ""
+                homeViewModel.screenWidth = proxy.size.width
+            }
+            .navigationDestination(for: HomeNavDestination.self, destination: { distination in
+                switch distination {
+                case .searchView(let searchText):
+                    SearchView(homeViewModel: homeViewModel, searchText: searchText)
+                case .mealListView(let ingredients):
+                    MealListView(ingredients: ingredients, proxy: proxy)
+                }
+            })
 
+        }
     }
+
 }
 
 #Preview {
@@ -86,7 +83,7 @@ extension HomeView {
                 
                 let text = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !text.isEmpty {
-                    router.path.append(HomeNavDestination.searchView(searchText: searchText))
+                    homeRouter.path.append(HomeNavDestination.searchView(searchText: searchText))
                 }
             } label: {
                 Image(systemName: "magnifyingglass")
@@ -110,7 +107,7 @@ extension HomeView {
                 if searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     isFocused = false
                 } else {
-                    router.path.append(HomeNavDestination.searchView(searchText: searchText))
+                    homeRouter.path.append(HomeNavDestination.searchView(searchText: searchText))
                 }
             }
             
@@ -132,7 +129,7 @@ extension HomeView {
     var findRecipesButton: some View {
         Button {
             isFocused = false
-            router.path.append(HomeNavDestination.mealListView(ingredients: homeViewModel.ingredients.filter({$0.isSelected})))
+            homeRouter.path.append(HomeNavDestination.mealListView(ingredients: homeViewModel.ingredients.filter({$0.isSelected})))
         } label: {
             Text("Find recipes →")
                 .font(Font.system(size: 26).bold())

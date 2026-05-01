@@ -11,4 +11,8 @@ import SwiftUI
 @Observable
 class Router {
     var path = NavigationPath()
+    
+    func pop() {
+        path.removeLast()
+    }
 }

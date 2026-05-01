@@ -8,7 +8,7 @@
 import SwiftData
 
 @Model
-class Recipe {
+class Recipe: Equatable {
     
     var name: String
     var category: String?
@@ -30,5 +30,8 @@ class Recipe {
         self.ingredients = ingredients
     }
     
+    static func == (lhs: Recipe, rhs: Recipe) -> Bool {
+            lhs.name == rhs.name
+    }
     
 }

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		D900A54C2F91475B00DB4600 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D900A54B2F91475B00DB4600 /* MockData.swift */; };
+		D9018E632FA4CCD10071DFE5 /* FavoriteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9018E622FA4CCD10071DFE5 /* FavoriteListView.swift */; };
+		D9018E652FA4CDB90071DFE5 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9018E642FA4CDB90071DFE5 /* FavoriteCell.swift */; };
+		D9018E692FA505040071DFE5 /* RecipeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9018E682FA505040071DFE5 /* RecipeDetailsView.swift */; };
 		D91DACD92FA3E78A00605F07 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D91DACD82FA3E78A00605F07 /* Recipe.swift */; };
 		D91DACDC2FA3EFAC00605F07 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D91DACDB2FA3EFAC00605F07 /* AppTabView.swift */; };
 		D984CB5A2F9852B30089CBE5 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D984CB592F9852B30089CBE5 /* CustomText.swift */; };
@@ -36,6 +39,9 @@
 
 /* Begin PBXFileReference section */
 		D900A54B2F91475B00DB4600 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		D9018E622FA4CCD10071DFE5 /* FavoriteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListView.swift; sourceTree = "<group>"; };
+		D9018E642FA4CDB90071DFE5 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
+		D9018E682FA505040071DFE5 /* RecipeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailsView.swift; sourceTree = "<group>"; };
 		D91DACD82FA3E78A00605F07 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		D91DACDB2FA3EFAC00605F07 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
 		D984CB592F9852B30089CBE5 /* CustomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
@@ -90,6 +96,15 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		D9018E612FA4CCB70071DFE5 /* FavoriteRecipes */ = {
+			isa = PBXGroup;
+			children = (
+				D9018E622FA4CCD10071DFE5 /* FavoriteListView.swift */,
+				D9018E682FA505040071DFE5 /* RecipeDetailsView.swift */,
+			);
+			path = FavoriteRecipes;
+			sourceTree = "<group>";
+		};
 		D91DACDA2FA3EF7000605F07 /* TabView */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +154,7 @@
 				D9A15B092F8A798900BD0F7B /* ChipView.swift */,
 				D98D0B8A2F96A79700B87332 /* MealCell.swift */,
 				D984CB592F9852B30089CBE5 /* CustomText.swift */,
+				D9018E642FA4CDB90071DFE5 /* FavoriteCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -184,6 +200,7 @@
 		D99D26C12F89B78C0054B119 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				D9018E612FA4CCB70071DFE5 /* FavoriteRecipes */,
 				D91DACDA2FA3EF7000605F07 /* TabView */,
 				D987719B2F9D3A090068BE47 /* MealDetails */,
 				D98D0B822F96416700B87332 /* MealList */,
@@ -319,9 +336,12 @@
 				D98D0B872F96419000B87332 /* MealListViewModel.swift in Sources */,
 				D91DACD92FA3E78A00605F07 /* Recipe.swift in Sources */,
 				D987719D2F9D3A1C0068BE47 /* MealDetailsView.swift in Sources */,
+				D9018E652FA4CDB90071DFE5 /* FavoriteCell.swift in Sources */,
 				D9E97F692F9FFF280081CAD8 /* GeminiResponse.swift in Sources */,
+				D9018E692FA505040071DFE5 /* RecipeDetailsView.swift in Sources */,
 				D987719A2F9D392E0068BE47 /* Router.swift in Sources */,
 				D9A15B102F8B02D300BD0F7B /* NetworkManager.swift in Sources */,
+				D9018E632FA4CCD10071DFE5 /* FavoriteListView.swift in Sources */,
 				D9A15B042F8A671C00BD0F7B /* HomeViewModel.swift in Sources */,
 				D98D0B842F96417800B87332 /* MealListView.swift in Sources */,
 				D9E97F6D2F9FFFC30081CAD8 /* GeminiManager.swift in Sources */,
