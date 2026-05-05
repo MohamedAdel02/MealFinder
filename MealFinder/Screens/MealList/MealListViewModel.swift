@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum ProgressStatus {
+    case loading
+    case success
+    case error
+}
 
 @Observable
 class MealListViewModel {
@@ -15,6 +20,7 @@ class MealListViewModel {
     var numOfPerfectMatch = 0
     var categories = [String]()
     let ingredients: [Ingredient]
+    var progressStatus = ProgressStatus.loading
     
     init (ingredients: [Ingredient]) {
         
@@ -26,7 +32,13 @@ class MealListViewModel {
                 let mealSet = try await getMealsDetails(of: mealsId)
                 meals = setMealsScore(mealSet, for: ingredients)
                 categories = getCategories(from: meals)
+                if meals.isEmpty {
+                    progressStatus = .error
+                } else {
+                    progressStatus = .success
+                }
             } catch {
+                progressStatus = .error
                 print(error.localizedDescription)
             }
         }

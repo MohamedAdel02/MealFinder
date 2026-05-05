@@ -15,6 +15,28 @@ struct SearchView: View {
     
     var body: some View {
         
+        if homeViewModel.ingredients.isEmpty {
+            ContentUnavailableView(
+                "No Results Found",
+                systemImage: "exclamationmark.triangle",
+                description: Text("Check your network connection and try again.")
+            )
+        } else {
+            listView
+        }
+           
+    }
+}
+
+#Preview {
+    SearchView(homeViewModel: HomeViewModel(), searchText: "Ch")
+}
+
+
+extension SearchView {
+    
+    var listView: some View {
+        
         List(homeViewModel.ingredients.indices, id: \.self) { index in
             let ingredient = homeViewModel.ingredients[index]
             if ingredient.name.lowercased().contains(searchText.lowercased()) {
@@ -44,8 +66,5 @@ struct SearchView: View {
             }
         }
     }
-}
-
-#Preview {
-    SearchView(homeViewModel: HomeViewModel(), searchText: "Ch")
+    
 }

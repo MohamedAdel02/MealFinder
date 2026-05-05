@@ -26,7 +26,6 @@ class MealDetailsViewModel {
     
     func getSteps(of instructions: String) async -> [String] {
         
-        
         do {
             let setps = try await GeminiManager.shared.getSteps(instructions)
             return setps

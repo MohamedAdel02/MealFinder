@@ -24,34 +24,44 @@ struct FavoriteListView: View {
     ]
     
     var body: some View {
-
-        GeometryReader { proxy in
-            ScrollView(showsIndicators: false) {
-                LazyVGrid(columns: columns, spacing: 15) {
-                    ForEach(recipes) { recipe in
-                        FavoriteCell(recipe: recipe, proxy: proxy) {
-                            context.delete(recipe)
-                        }
-                        .onTapGesture {
-                            favoriteRouter.path.append(FavoriteNavDestination.RecipeDetailsView(recipe: recipe))
-                        }
-                        
-                    }
-                }
-                .padding(.horizontal, 15)
-            }
-            .navigationDestination(for: FavoriteNavDestination.self) { destination in
-                switch destination {
-                case .RecipeDetailsView(let recipe):
-                    RecipeDetailsView(recipe: recipe, proxy: proxy) {
-                        favoriteRouter.pop()
-                        context.delete(recipe)
-                    }
-                }
-            }
+        
+        if recipes.isEmpty {
+            ContentUnavailableView(
+                "No Favorites Yet",
+                systemImage: "heart.slash",
+                description: Text("Meals you save will appear here.")
+            )
+        } else {
             
-        }
-        .navigationTitle("Favorite Recipes")
+            GeometryReader { proxy in
+                ScrollView(showsIndicators: false) {
+                    LazyVGrid(columns: columns, spacing: 15) {
+                        ForEach(recipes) { recipe in
+                            FavoriteCell(recipe: recipe, proxy: proxy) {
+                                context.delete(recipe)
+                            }
+                            .onTapGesture {
+                                favoriteRouter.path.append(FavoriteNavDestination.RecipeDetailsView(recipe: recipe))
+                            }
+                            
+                        }
+                    }
+                    .padding(.horizontal, 15)
+                }
+                .navigationDestination(for: FavoriteNavDestination.self) { destination in
+                    switch destination {
+                    case .RecipeDetailsView(let recipe):
+                        RecipeDetailsView(recipe: recipe, proxy: proxy) {
+                            context.delete(recipe)
+                        } onAddTapped: {
+                            context.insert(recipe)
+                        }
+                    }
+                }
+                
+            }
+            .navigationTitle("Favorite Recipes")
+        } 
         
     }
 

@@ -16,7 +16,7 @@ struct MealCell: View {
     var body: some View {
         VStack {
 
-            mealImage
+            ImageView(url: meal.thumbnail, height: proxy.size.height * 0.15)
             
             mealName
                 .padding(.vertical, 10)
@@ -62,22 +62,7 @@ struct MealCell: View {
 }
 
 extension MealCell {
-    
-    var mealImage: some View {
-        
-        AsyncImage(url: URL(string: meal.thumbnail ?? "")){ image in
-            image
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity)
-                .frame(height: proxy.size.height * 0.15)
-                .clipped()
-        } placeholder: {
-            ProgressView()
-                .frame(width: 100, height: 100)
-        }
-    }
-    
+
     var mealName: some View {
         Text(meal.name)
             .font(.headline)

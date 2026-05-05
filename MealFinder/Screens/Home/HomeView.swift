@@ -135,9 +135,11 @@ extension HomeView {
                 .font(Font.system(size: 26).bold())
                 .foregroundStyle(.white)
                 .frame(width: 230, height: 80)
-                .background(Color.accentColor)
+                .background(homeViewModel.ingCount == 0 ? .gray : .accent)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
         }
+        .disabled(homeViewModel.ingCount == 0)
+        
     }
     
     

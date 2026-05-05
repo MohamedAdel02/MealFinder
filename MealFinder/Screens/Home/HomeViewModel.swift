@@ -14,11 +14,14 @@ class HomeViewModel {
     
     var ingredients: [Ingredient] = [] {
         didSet {
+            ingCount = 0
             let selectedIngredients = ingredients.filter({$0.isSelected})
+            ingCount = selectedIngredients.count
             groupedIngredients = updateGroupedIng(with: selectedIngredients)
         }
     }
     
+    var ingCount = 0
     var groupedIngredients: [[String]] = []
     var screenWidth = 0.0
     

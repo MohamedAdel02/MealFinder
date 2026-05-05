@@ -8,12 +8,21 @@
 import SwiftUI
 import SwiftData
 
+enum toastType {
+    case addToFav
+    case removeFromFav
+    case none
+}
+
 struct MealDetailsView: View {
     
     var mealDetailsViewModel = MealDetailsViewModel()
     let meal: Meal
+    @State var showToast: toastType = .none
+    @State var toastTask: Task<Void, Never>?
     let userIngredients: [String]
     let proxy: GeometryProxy
+    let recipe: Recipe
     let customRed = Color(red: 0.85, green: 0.2, blue: 0.15)
     @Query var recipes: [Recipe]
     @Environment(\.modelContext) private var context
@@ -23,12 +32,19 @@ struct MealDetailsView: View {
         self.userIngredients = ingredients.map{ $0.name }
         self.meal = mealDetailsViewModel.updateIngredientsOrder(meal: meal, userIngredients: userIngredients)
         self.proxy = proxy
+        
+        recipe = Recipe(
+            name: meal.name,
+            category: meal.category,
+            thumbnail: meal.thumbnail,
+            instructions: meal.instructions,
+            ingredients: meal.ingredients.map { Recipe.Ingredient(name: $0.name, measure: $0.measure)})
     }
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             
-            mealImage
+            ImageView(url: meal.thumbnail, height: proxy.size.height * 0.3)
             
             Text("\(meal.name)")
                 .font(.title.bold())
@@ -50,26 +66,30 @@ struct MealDetailsView: View {
             StepsView(instructions: meal.instructions)
                 .padding(.top, 20)
             
-            Button {
-                let recipe = Recipe(
-                    name: meal.name,
-                    category: meal.category,
-                    thumbnail: meal.thumbnail,
-                    instructions: meal.instructions,
-                    ingredients: meal.ingredients.map { Recipe.Ingredient(name: $0.name, measure: $0.measure)})
-                if !recipes.contains(recipe) {
-                    context.insert(recipe)
-                }
-            } label: {
-                Text("Add to Favorites")
-                    .font(.title3.bold())
-                    .frame(width: 230, height: 60)
-                    .background(.accent)
-                    .foregroundStyle(.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            if recipes.contains(recipe) {
+                removeFromFavoriteButton
+            } else {
+                addToFavoriteButton
             }
-            .padding(.vertical, 30)
         }
+        .overlay(alignment: .top) {
+            if showToast == .removeFromFav {
+                Text("Removed from Favorites ✓")
+                    .font(.subheadline.bold())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(.red.opacity(0.9), in: Capsule())
+            } else if showToast == .addToFav {
+                Text("Add to Favorites ✓")
+                    .font(.subheadline.bold())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(.accent.opacity(0.9), in: Capsule())
+            }
+        }
+        
     }
 }
 
@@ -80,21 +100,6 @@ struct MealDetailsView: View {
 }
 
 extension MealDetailsView {
-    
-    var mealImage: some View {
-        AsyncImage(url: URL(string: meal.thumbnail ?? "")){ image in
-            image
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity)
-                .frame(height: proxy.size.height * 0.3)
-                .clipped()
-        } placeholder: {
-            ProgressView()
-                .frame(width: 100, height: proxy.size.height * 0.3)
-        }
-    }
-    
     
     var IngredientsList: some View {
         
@@ -110,22 +115,57 @@ extension MealDetailsView {
                     .font(.headline.bold())
                     .foregroundStyle(userIngredients.contains(ingredient.name) ? Color.primary : customRed)
                 
-                
                 Spacer()
                 
                 Text(ingredient.measure)
                     .font(.callout.bold())
                     .frame(width: 140, alignment: .leading)
                     .foregroundStyle(userIngredients.contains(ingredient.name) ? Color.primary : customRed)
-
-
             }
             .padding(.bottom, 5)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-
     }
     
+    var removeFromFavoriteButton: some View {
+        Button {
+            context.delete(recipe)
+            toastTask?.cancel()
+            showToast = .removeFromFav
+            toastTask = Task {
+                try? await Task.sleep(for: .seconds(1.5))
+                guard !Task.isCancelled else { return }
+                showToast = .none
+            }
+        } label: {
+            Text("Removie from Favorites")
+                .font(.title3.bold())
+                .frame(width: 250, height: 60)
+                .background(.red)
+                .foregroundStyle(.background)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+        }
+        .padding(.vertical, 30)
+    }
     
-    
+    var addToFavoriteButton: some View {
+        Button {
+            context.insert(recipe)
+            toastTask?.cancel()
+            showToast = .addToFav
+            toastTask = Task {
+                try? await Task.sleep(for: .seconds(1.5))
+                guard !Task.isCancelled else { return }
+                showToast = .none
+            }
+        } label: {
+            Text("Add to Favorites")
+                .font(.title3.bold())
+                .frame(width: 230, height: 60)
+                .background(.accent)
+                .foregroundStyle(.background)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+        }
+        .padding(.vertical, 30)
+    }
 }

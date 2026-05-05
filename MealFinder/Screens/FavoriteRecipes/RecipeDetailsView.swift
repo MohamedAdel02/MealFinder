@@ -9,9 +9,13 @@ import SwiftUI
 
 struct RecipeDetailsView: View {
     let recipe: Recipe
+    @State var isFav = true
+    @State var showToast: toastType = .none
+    @State var toastTask: Task<Void, Never>?
     let proxy: GeometryProxy
     
     var onDeleteTapped: () -> Void
+    var onAddTapped: () -> Void
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -38,26 +42,39 @@ struct RecipeDetailsView: View {
             StepsView(instructions: recipe.instructions)
                 .padding(.top, 20)
             
-            Button {
-                onDeleteTapped()
-            } label: {
-                Text("Remove from Favorites")
-                    .font(.title3.bold())
-                    .frame(width: 230, height: 60)
-                    .background(.red)
-                    .foregroundStyle(.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            if isFav {
+                removeFromFavoriteButton
+            } else {
+                addToFavoriteButton
             }
-            .padding(.vertical, 30)
             
+        }
+        .overlay(alignment: .top) {
+            if showToast == .removeFromFav {
+                Text("Removed from Favorites ✓")
+                    .font(.subheadline.bold())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(.red.opacity(0.9), in: Capsule())
+            } else if showToast == .addToFav {
+                Text("Add to Favorites ✓")
+                    .font(.subheadline.bold())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(.accent.opacity(0.9), in: Capsule())
+            }
         }
     }
 }
 
 #Preview {
     GeometryReader { proxy in
-        RecipeDetailsView(recipe: MockData.recipe, proxy: proxy) {
+        RecipeDetailsView(recipe: MockData.recipe, proxy: proxy){
             print("Delete")
+        } onAddTapped: {
+            print("ADd")
         }
     }
 }
@@ -66,17 +83,35 @@ struct RecipeDetailsView: View {
 extension RecipeDetailsView {
     
     var recipeImage: some View {
-        AsyncImage(url: URL(string: recipe.thumbnail ?? "")){ image in
-            image
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity)
-                .frame(height: proxy.size.height * 0.3)
-                .clipped()
-        } placeholder: {
-            ProgressView()
-                .frame(width: 100, height: proxy.size.height * 0.3)
+        
+        AsyncImage(url: URL(string: recipe.thumbnail ?? "")) { phase in
+            switch phase {
+            case .success(let image):
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: proxy.size.height * 0.3)
+                    .clipped()
+
+            case .failure:
+                Image(systemName: "photo.badge.exclamationmark")
+                    .font(.system(size: 36))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: proxy.size.height * 0.3)
+                    .background(Color(.systemGray6))
+
+            case .empty:
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: proxy.size.height * 0.3)
+
+            @unknown default:
+                EmptyView()
+            }
         }
+        
     }
     
     
@@ -107,4 +142,48 @@ extension RecipeDetailsView {
 
     }
 
+    var removeFromFavoriteButton: some View {
+        Button {
+            onDeleteTapped()
+            isFav.toggle()
+            toastTask?.cancel()
+            showToast = .removeFromFav
+            toastTask = Task {
+                try? await Task.sleep(for: .seconds(1.5))
+                guard !Task.isCancelled else { return }
+                showToast = .none
+            }
+        } label: {
+            Text("Removie from Favorites")
+                .font(.title3.bold())
+                .frame(width: 250, height: 60)
+                .background(.red)
+                .foregroundStyle(.background)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+        }
+        .padding(.vertical, 30)
+    }
+    
+    var addToFavoriteButton: some View {
+        Button {
+            onAddTapped()
+            isFav.toggle()
+            toastTask?.cancel()
+            showToast = .addToFav
+            toastTask = Task {
+                try? await Task.sleep(for: .seconds(1.5))
+                guard !Task.isCancelled else { return }
+                showToast = .none
+            }
+        } label: {
+            Text("Add to Favorites")
+                .font(.title3.bold())
+                .frame(width: 230, height: 60)
+                .background(.accent)
+                .foregroundStyle(.background)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+        }
+        .padding(.vertical, 30)
+    }
+    
 }

@@ -7,9 +7,16 @@
 
 import SwiftUI
 
+enum StepViewStatus {
+    case loading
+    case success
+    case error
+}
+
 struct StepsView: View {
     
     @State var steps = [String]()
+    @State var status: StepViewStatus = .loading
     let instructions: String
     let mealDetailsViewModel = MealDetailsViewModel()
     
@@ -18,13 +25,48 @@ struct StepsView: View {
     }
 
     var body: some View {
+    
+        Text("Steps")
+            .bold()
+            .foregroundStyle(Color.init(uiColor: .darkGray))
+            .padding(.vertical, 10)
+            .padding(.horizontal, 20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        
+        if status == .loading {
+            LoadingView()
+                .task {
+                    if instructions != "" {
+                        steps = await mealDetailsViewModel.getSteps(of: instructions)
+                    }
+                    if steps.isEmpty {
+                        status = .error
+                    } else {
+                        status = .success
+                    }
+                }
+        } else if status == .success {
+            stepsList
+        } else if status == .error {
+            ContentUnavailableView(
+                "Something Went Wrong",
+                systemImage: "exclamationmark.triangle",
+                description: Text("Couldn't load the steps. Please try again.")
+            )
+        }
+    }
+    
+        
+}
+
+#Preview {
+    StepsView(instructions: MockData.meal.instructions)
+}
+
+extension StepsView {
+    
+    var stepsList: some View {
         VStack(alignment: .leading) {
-            Text("Steps")
-                .bold()
-                .foregroundStyle(Color.init(uiColor: .darkGray))
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                .frame(maxWidth: .infinity, alignment: .leading)
             
             ForEach(steps.indices, id: \.self) { index in
                 HStack(alignment: .top) {
@@ -43,15 +85,6 @@ struct StepsView: View {
             }
             .padding(.horizontal, 25)
         }
-        .task {
-            if instructions != "" {
-                steps = await mealDetailsViewModel.getSteps(of: instructions)
-            }
-        }
     }
-        
-}
-
-#Preview {
-    StepsView(instructions: MockData.meal.instructions)
+    
 }

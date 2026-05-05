@@ -30,13 +30,44 @@ struct MealListView: View {
     }
     
     var body: some View {
-        ScrollView {
+        
+        if mealListViewModel.progressStatus == .loading {
+            ProgressView()
+        } else if mealListViewModel.progressStatus == .error {
+            ContentUnavailableView(
+                "Something Went Wrong",
+                systemImage: "exclamationmark.triangle",
+                description: Text("Please check your connection and try again")
+            )
+        } else if mealListViewModel.progressStatus == .success {
+            listView
+        }
+    }
+    
+    func isSelected(_ category: String) -> Bool {
+        category == selectedCategory
+    }
+         
+}
 
+#Preview {
+    GeometryReader { proxy in
+        MealListView(ingredients: Array(MockData.ingredients[6...8]), proxy: proxy)
+            .environment(Router())
+    }
+}
+
+
+extension MealListView {
+    
+    var listView: some View {
+        ScrollView {
+            
             header
                 .padding(.horizontal, 20)
             
             categoriesScrollView
-
+            
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(mealListViewModel.meals.filter {
                     selectedCategory == "All" || $0.category == selectedCategory
@@ -48,6 +79,7 @@ struct MealListView: View {
                 }
             }
             .padding(.horizontal, 15)
+            .padding(.top, 5)
         }
         .scrollIndicators(.hidden)
         .navigationTitle("Meals")
@@ -59,22 +91,6 @@ struct MealListView: View {
             }
         }
     }
-    
-    
-    func isSelected(_ category: String) -> Bool {
-        category == selectedCategory
-    }
-         
-}
-
-#Preview {
-    GeometryReader { proxy in
-        MealListView(ingredients: Array(MockData.ingredients[6...8]), proxy: proxy)
-    }
-}
-
-
-extension MealListView {
     
     var header: some View {
         VStack(spacing: 10) {
